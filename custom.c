@@ -1,3 +1,4 @@
+// A.E. Sokolowski Jan 2022 NY, NY, USA
 // custom.c
 // basics for simple C server lifted from https://www.youtube.com/watch?v=gk6NL1pZi1M
 
@@ -14,6 +15,7 @@
 #include "include/msg.h"
 #include "include/templ.h"
 
+#include "include/Screen.h"
 #include "include/Server.h"
 
 // TODO: move the ncurses session stuff into a different function, after it closes calls launch,
@@ -41,53 +43,44 @@ void launch(struct Server *server)
     char *chosen_bg_clr = malloc(sizeof(char) * cn.COLOR_BUFF);
     char *chosen_tx_clr = malloc(sizeof(char) * cn.COLOR_BUFF);
 
-    int win_y,
-	win_x;
-
     time_t rawtime;
     struct tm *timeinfo;
 
-    int choice;
+    char choice;
 
-    WINDOW *win;
+    struct Screen screen;
 
     strncpy(chosen_color, cl.BLUE_SEL, cn.COLOR_BUFF);
     strncpy(chosen_bg_clr, cl.BLUE_CSS, cn.COLOR_BUFF);
     strncpy(chosen_tx_clr, cl.SALMON_CSS, cn.COLOR_BUFF);
 
-    initscr();
-    cbreak();
-    noecho();
+    screen = screen_constructor(cn.WIN_H, cn.WIN_W);
 
-    getmaxyx(stdscr, win_y, win_x);
-
-    win = newwin(cn.WIN_H, cn.WIN_W, win_y / 2 - cn.WIN_H / 2, win_x / 2 - cn.WIN_W / 2);
-    wborder(win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
+    wborder(screen.win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
     refresh();
 
     do {
-	getmaxyx(stdscr, win_y, win_x);
-        win = newwin(cn.WIN_H, cn.WIN_W, win_y / 2 - cn.WIN_H / 2, win_x / 2 - cn.WIN_W / 2);
-        
-	mvwprintw(win, 4, 2, "%s", msg.WELCOME);
-	mvwprintw(win, 5, 2, "%s ", msg.COLOR);
+        refresh_scr(&screen);
+
+	mvwprintw(screen.win, 4, 2, "%s", msg.WELCOME);
+	mvwprintw(screen.win, 5, 2, "%s ", msg.COLOR);
 	if (strncmp(chosen_color, cl.BLUE_SEL, cn.COLOR_BUFF) == 0)
 	{
-            opt_hl(win, cl.BLUE_SEL); 
-	} else wprintw(win, "%s ", cl.BLUE_UNSEL);
+            opt_hl(screen.win, cl.BLUE_SEL); 
+	} else wprintw(screen.win, "%s ", cl.BLUE_UNSEL);
 	if (strncmp(chosen_color, cl.GREEN_SEL, cn.COLOR_BUFF) == 0)
 	{
-	    opt_hl(win, cl.GREEN_SEL);
-	} else wprintw(win, "%s ", cl.GREEN_UNSEL);
+	    opt_hl(screen.win, cl.GREEN_SEL);
+	} else wprintw(screen.win, "%s ", cl.GREEN_UNSEL);
 	if (strncmp(chosen_color, cl.RED_SEL, cn.COLOR_BUFF) == 0)
 	{
-            opt_hl(win, cl.RED_SEL);
-	} else wprintw(win, "%s ", cl.RED_UNSEL);
-	mvwprintw(win, 7, 2, "%s", cn.OKAY);
+            opt_hl(screen.win, cl.RED_SEL);
+	} else wprintw(screen.win, "%s ", cl.RED_UNSEL);
+	mvwprintw(screen.win, 7, 2, "%s", cn.OKAY);
 
-    	wborder(win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
+    	wborder(screen.win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
 	refresh();
-        wrefresh(win);
+        wrefresh(screen.win);
         choice = getch();
 
 	switch (choice)
@@ -114,22 +107,22 @@ void launch(struct Server *server)
     strncpy(chosen_color, cl.SALMON_SEL, cn.COLOR_BUFF);
 
     do {
-	mvwprintw(win, 5, 2, "%s ", msg.TEXT);
+	mvwprintw(screen.win, 5, 2, "%s ", msg.TEXT);
 	if (strncmp(chosen_color, cl.SALMON_SEL, cn.COLOR_BUFF) == 0)
 	{
-            opt_hl(win, cl.SALMON_SEL); 
-	} else wprintw(win, "%s ", cl.SALMON_UNSEL);
+            opt_hl(screen.win, cl.SALMON_SEL); 
+	} else wprintw(screen.win, "%s ", cl.SALMON_UNSEL);
 	if (strncmp(chosen_color, cl.THISTLE_SEL, cn.COLOR_BUFF) == 0)
 	{
-	    opt_hl(win, cl.THISTLE_SEL);
-	} else wprintw(win, "%s ", cl.THISTLE_UNSEL);
+	    opt_hl(screen.win, cl.THISTLE_SEL);
+	} else wprintw(screen.win, "%s ", cl.THISTLE_UNSEL);
 	if (strncmp(chosen_color, cl.TOMATO_SEL, cn.COLOR_BUFF) == 0)
 	{
-            opt_hl(win, cl.TOMATO_SEL);
-	} else wprintw(win, "%s ", cl.TOMATO_UNSEL);
-	mvwprintw(win, 7, 2, "%s", cn.OKAY);
+            opt_hl(screen.win, cl.TOMATO_SEL);
+	} else wprintw(screen.win, "%s ", cl.TOMATO_UNSEL);
+	mvwprintw(screen.win, 7, 2, "%s", cn.OKAY);
 
-	wrefresh(win);
+	wrefresh(screen.win);
 	choice = getch();
 
         switch (choice)
@@ -164,8 +157,7 @@ void launch(struct Server *server)
     free(header);
     free(body);
 
-    endwin(); // ending here because printw wasn't printing the results from the buffer... maybe because of wrap
-              // and newlines? Not important, really, but would be nice to figure out.
+    kill_scr(&screen);
 
     while (1)
     {

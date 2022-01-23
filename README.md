@@ -7,3 +7,6 @@ for ncurses library:
 sudo apt-get install libncursesw5-dev
 
 everything else should be included in GCC by default
+
+current task: splitting out modular logic into other files, possibly structs that act like C++ classes
+

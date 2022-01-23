@@ -26,5 +26,5 @@ struct Server
 
 struct Server server_constructor(int, int, int, u_long, int, int, void (*launch)(struct Server *));
 
-#endif /* server_h */
+#endif /* Server_h */
  
