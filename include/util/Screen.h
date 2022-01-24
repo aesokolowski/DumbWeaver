@@ -9,16 +9,21 @@
 struct Screen
 {
     WINDOW *win;
+    struct Choices *choices;
+
     int height,
 	width,
 	y,
 	x;
 };
 
-struct Screen screen_constructor(int, int);
+struct Screen screen_constructor(int, int, struct Choices *);
 
 void recalc_scr(struct Screen *);
 void refresh_scr(struct Screen *);
+void print_menu(struct Screen *, char *);
 void kill_scr(struct Screen *);
+void opt_hl(WINDOW *, char *);
 
 #endif /* Screen_h */
+

@@ -20,6 +20,9 @@ const struct colors cl = {
     .RED_CSS = "red",
     .SALMON_CSS = "salmon",
     .THISTLE_CSS = "thistle",
-    .TOMATO_CSS = "tomato"
+    .TOMATO_CSS = "tomato",
+
+    .BG_PAL = "background palette",
+    .TX_PAL = "text palette"
 };
 

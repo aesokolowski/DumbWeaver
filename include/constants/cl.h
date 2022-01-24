@@ -24,6 +24,9 @@ struct colors {
 	 *SALMON_CSS,
 	 *THISTLE_CSS,
 	 *TOMATO_CSS;
+
+    char *BG_PAL,
+	 *TX_PAL;
 };
 
 extern const struct colors cl;
