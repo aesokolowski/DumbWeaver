@@ -55,6 +55,7 @@ void launch(struct Server *server)
         choice = getch();
 
 	// putting extraction into Choices on hold because the case stuff seems annoying
+	// IDEA: in Palettes add a string i.e. "bgr" for cl.BG_PAL and "stm"for cl.TX_PAL
 	switch (choice)
 	{
             case 'b':
@@ -103,21 +104,39 @@ void launch(struct Server *server)
 
     clear();
 
-    // NOTES: stuck right now on how to detect backspaces with ncurses... once I can do that
-    // I can probably edit the screen and headline_input pretty easily
+    // NOTES: need to figure out how to not backup too far but I'll worry about that after
+    // basic functionality is established
     strncpy(headline_input, "", 2);
     mvprintw(0, 0, "type a headline and press ENTER when you're done: ");
     do {
         choice = getch();
 	if (choice == cn.BS_KEY) {
-            printw("What the fuck?");
+            int y, x;
+	    int len = strlen(headline_input);
+
+            if (len > 0) {
+    	        getyx(stdscr, y, x);
+	        --x;
+	        move(y, x);
+	        delch();
+                headline_input[len - 1] = '\0';
+	    }
+	} else {
+	    char *ch_str = malloc(sizeof(char) * 2);
+
+	    snprintf(ch_str, 2, "%c", choice);
+	    printw(ch_str);
+	    headline_input[strlen(headline_input)] = choice;
+	    free(ch_str);
 	}
-	headline_input[strlen(headline_input)] = choice;
+
+	refresh();
     } while (choice != '\n');
 
     time(&rawtime);
     timeinfo = localtime(&rawtime);
 
+    // change sprintf's to snprintf's
     sprintf(body, templ.RESP_BODY, choices.chosen_bg_color, choices.chosen_tx_color, headline_input);
     sprintf(header, templ.RESP_HEAD, asctime(timeinfo), strlen(body));
     strncpy(response, header, cn.HEAD_BUFF);
