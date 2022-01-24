@@ -37,6 +37,7 @@ void launch(struct Server *server)
     char *header = malloc(sizeof(char) * cn.HEAD_BUFF);
     char *body = malloc(sizeof(char) * cn.BODY_BUFF);
     char *response = malloc(sizeof(char) * cn.REQ_BUFF);
+    char *headline_input = malloc(sizeof(char) * cn.BODY_BUFF);
 
     time_t rawtime;
     struct tm *timeinfo;
@@ -53,9 +54,7 @@ void launch(struct Server *server)
         refresh_scr(&screen);
         choice = getch();
 
-	// want to put this in the Choices util file, but I'll probably want to
-	// take the palette-choosing section of print_menu and extract it into
-	// its own file (not sure which "class" to put it in, though)
+	// putting extraction into Choices on hold because the case stuff seems annoying
 	switch (choice)
 	{
             case 'b':
@@ -102,10 +101,21 @@ void launch(struct Server *server)
         }
     } while (choice != 'o');
 
+    clear();
+
+    echo();
+    strncpy(headline_input, "", 2);
+    mvprintw(0, 0, "type a headline and press ENTER when you're done: ");
+    do {
+        choice = getch();
+	headline_input[strlen(headline_input)] = choice;
+    } while (choice != '\n');
+    noecho();
+
     time(&rawtime);
     timeinfo = localtime(&rawtime);
 
-    sprintf(body, templ.RESP_BODY, choices.chosen_bg_color, choices.chosen_tx_color);
+    sprintf(body, templ.RESP_BODY, choices.chosen_bg_color, choices.chosen_tx_color, headline_input);
     sprintf(header, templ.RESP_HEAD, asctime(timeinfo), strlen(body));
     strncpy(response, header, cn.HEAD_BUFF);
     strncat(response, body, cn.BODY_BUFF);
@@ -113,6 +123,7 @@ void launch(struct Server *server)
     free_choices(&choices);
     free(header);
     free(body);
+    free(headline_input);
 
     kill_scr(&screen);
 
