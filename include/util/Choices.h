@@ -11,6 +11,7 @@ struct Choices {
 };
 
 struct Choices choices_constructor(char *);
+//void handle_clr_chg(struct Choices *, char, char *); maybe future?
 void free_choices(struct Choices *);
 
 #endif /* Choices_h */

@@ -10,6 +10,7 @@
 #include "../include/constants/msg.h"
 
 #include "../include/util/Choices.h"
+#include "../include/util/Palettes.h"
 #include "../include/util/Screen.h"
 
 struct Screen screen_constructor(int height, int width, struct Choices *choices)
@@ -50,45 +51,26 @@ void refresh_scr(struct Screen *screen)
 
 void print_menu(struct Screen *screen, char *palette)
 {
-    char *color1sel,
-        *color1unsel,
-	*color2sel,
-	*color2unsel,
-	*color3sel,
-	*color3unsel;
-
-    if (strncmp(palette, cl.BG_PAL, cn.COLOR_BUFF) == 0) {
-        color1sel = cl.BLUE_SEL;
-	color1unsel = cl.BLUE_UNSEL;
-	color2sel = cl.GREEN_SEL;
-	color2unsel = cl.GREEN_UNSEL;
-	color3sel = cl.RED_SEL;
-	color3unsel = cl.RED_UNSEL;
-    } else if (strncmp(palette, cl.TX_PAL, cn.COLOR_BUFF) == 0) {
-        color1sel = cl.SALMON_SEL;
-	color1unsel = cl.SALMON_UNSEL;
-	color2sel = cl.THISTLE_SEL;
-	color2unsel = cl.THISTLE_UNSEL;
-	color3sel = cl.TOMATO_SEL;
-	color3unsel = cl.TOMATO_UNSEL;
-    }
-
+    struct Palettes palettes = palettes_constructor(palette);
+    
     clear();
     mvwprintw(screen->win, 4, 2, "%s", msg.WELCOME);
     mvwprintw(screen->win, 5, 2, "%s ", msg.COLOR);
-    if (strncmp(screen->choices->chosen_color, color1sel, cn.COLOR_BUFF) == 0)
+    if (strncmp(screen->choices->chosen_color, palettes.color1sel, cn.COLOR_BUFF) == 0)
     {
-        opt_hl(screen->win, color1sel);
-    } else wprintw(screen->win, "%s ", color1unsel);
-    if (strncmp(screen->choices->chosen_color, color2sel, cn.COLOR_BUFF) == 0)
+        opt_hl(screen->win, palettes.color1sel);
+    } else wprintw(screen->win, "%s ", palettes.color1unsel);
+    if (strncmp(screen->choices->chosen_color, palettes.color2sel, cn.COLOR_BUFF) == 0)
     {
-        opt_hl(screen->win, color2sel);
-    } else wprintw(screen->win, "%s ", color2unsel);
-    if (strncmp(screen->choices->chosen_color, color3sel, cn.COLOR_BUFF) == 0)
+        opt_hl(screen->win, palettes.color2sel);
+    } else wprintw(screen->win, "%s ", palettes.color2unsel);
+    if (strncmp(screen->choices->chosen_color, palettes.color3sel, cn.COLOR_BUFF) == 0)
     {
-        opt_hl(screen->win, color3sel);
-    } else wprintw(screen->win, "%s ", color3unsel);
+        opt_hl(screen->win, palettes.color3sel);
+    } else wprintw(screen->win, "%s ", palettes.color3unsel);
     mvwprintw(screen->win, 7, 2, "%s", cn.OKAY);
+
+    free_palettes(&palettes);
 }
 
 void kill_scr(struct Screen *screen)

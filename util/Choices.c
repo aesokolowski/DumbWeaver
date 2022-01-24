@@ -8,13 +8,14 @@
 #include "../include/constants/cn.h"
 #include "../include/util/Choices.h"
 
-struct Choices choices_constructor(char * initial_clr)
+struct Choices choices_constructor(char *initial_clr)
 {
     struct Choices choices;
 
     choices.chosen_color = malloc(sizeof(char) * cn.COLOR_BUFF);
     choices.chosen_bg_color = malloc(sizeof(char) * cn.COLOR_BUFF);
     choices.chosen_tx_color = malloc(sizeof(char) * cn.COLOR_BUFF);
+
     strncpy(choices.chosen_color, initial_clr, cn.COLOR_BUFF);
     strncpy(choices.chosen_bg_color, cl.BLUE_CSS, cn.COLOR_BUFF);
     strncpy(choices.chosen_tx_color, cl.SALMON_CSS, cn.COLOR_BUFF);

@@ -20,10 +20,6 @@
 #include "include/util/Screen.h"
 #include "include/util/Server.h"
 
-// TODO: move the ncurses session stuff into a different function, after it closes calls launch,
-// most importantly, see how ncurses can handle user input and use that
-// to change the content of the h1 so it always isn't about Zoe farting.
-
 int main()
 {
     struct Server server = server_constructor(AF_INET, SOCK_STREAM, 0, INADDR_ANY, 80, 10, launch);
