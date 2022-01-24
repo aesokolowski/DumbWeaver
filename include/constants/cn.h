@@ -10,6 +10,8 @@ struct constants {
     int WIN_H,
 	WIN_W;
 
+    int BS_KEY;
+
     char *OKAY;
 };
 

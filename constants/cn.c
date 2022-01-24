@@ -9,6 +9,8 @@ const struct constants cn = {
     .WIN_H = 10,
     .WIN_W = 60,
 
+    .BS_KEY = 127,
+
     .OKAY = "(o)k"
 };
 

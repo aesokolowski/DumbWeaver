@@ -107,15 +107,13 @@ void launch(struct Server *server)
     // I can probably edit the screen and headline_input pretty easily
     strncpy(headline_input, "", 2);
     mvprintw(0, 0, "type a headline and press ENTER when you're done: ");
-    keypad(stdscr, true);
     do {
         choice = getch();
-	if (strncmp(sprintf("%c", choice), sprintf("%c", KEY_BACKSPACE), 2) == 0) {
+	if (choice == cn.BS_KEY) {
             printw("What the fuck?");
 	}
 	headline_input[strlen(headline_input)] = choice;
     } while (choice != '\n');
-    keypad(stdscr, false);
 
     time(&rawtime);
     timeinfo = localtime(&rawtime);
