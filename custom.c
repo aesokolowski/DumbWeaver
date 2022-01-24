@@ -57,6 +57,9 @@ void launch(struct Server *server)
         refresh_scr(&screen);
         choice = getch();
 
+	// want to put this in the Choices util file, but I'll probably want to
+	// take the palette-choosing section of print_menu and extract it into
+	// its own file (not sure which "class" to put it in, though)
 	switch (choice)
 	{
             case 'b':
@@ -73,30 +76,15 @@ void launch(struct Server *server)
 	    default:
 		break;
         }
-
-	if (choice != 'o') clear();
     } while (choice != 'o');
 
     choice = 's';
     strncpy(choices.chosen_color, cl.SALMON_SEL, cn.COLOR_BUFF);
 
     do {
-	mvwprintw(screen.win, 5, 2, "%s ", msg.TEXT);
-	if (strncmp(choices.chosen_color, cl.SALMON_SEL, cn.COLOR_BUFF) == 0)
-	{
-            opt_hl(screen.win, cl.SALMON_SEL); 
-	} else wprintw(screen.win, "%s ", cl.SALMON_UNSEL);
-	if (strncmp(choices.chosen_color, cl.THISTLE_SEL, cn.COLOR_BUFF) == 0)
-	{
-	    opt_hl(screen.win, cl.THISTLE_SEL);
-	} else wprintw(screen.win, "%s ", cl.THISTLE_UNSEL);
-	if (strncmp(choices.chosen_color, cl.TOMATO_SEL, cn.COLOR_BUFF) == 0)
-	{
-            opt_hl(screen.win, cl.TOMATO_SEL);
-	} else wprintw(screen.win, "%s ", cl.TOMATO_UNSEL);
-	mvwprintw(screen.win, 7, 2, "%s", cn.OKAY);
-
-	wrefresh(screen.win);
+	recalc_scr(&screen);
+	print_menu(&screen, cl.TX_PAL);
+	refresh_scr(&screen);
 	choice = getch();
 
         switch (choice)

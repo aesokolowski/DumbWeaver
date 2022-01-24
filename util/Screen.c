@@ -64,8 +64,16 @@ void print_menu(struct Screen *screen, char *palette)
 	color2unsel = cl.GREEN_UNSEL;
 	color3sel = cl.RED_SEL;
 	color3unsel = cl.RED_UNSEL;
+    } else if (strncmp(palette, cl.TX_PAL, cn.COLOR_BUFF) == 0) {
+        color1sel = cl.SALMON_SEL;
+	color1unsel = cl.SALMON_UNSEL;
+	color2sel = cl.THISTLE_SEL;
+	color2unsel = cl.THISTLE_UNSEL;
+	color3sel = cl.TOMATO_SEL;
+	color3unsel = cl.TOMATO_UNSEL;
     }
 
+    clear();
     mvwprintw(screen->win, 4, 2, "%s", msg.WELCOME);
     mvwprintw(screen->win, 5, 2, "%s ", msg.COLOR);
     if (strncmp(screen->choices->chosen_color, color1sel, cn.COLOR_BUFF) == 0)
