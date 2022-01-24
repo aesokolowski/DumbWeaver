@@ -1,4 +1,4 @@
-#include "../include/cn.h"
+#include "../include/constants/cn.h"
 
 const struct constants cn = {
     .REQ_BUFF = 30000,

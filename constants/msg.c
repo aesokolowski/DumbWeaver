@@ -1,4 +1,4 @@
-#include "../include/msg.h"
+#include "../include/constants/msg.h"
 
 const struct messages msg = {
     .WELCOME = "Make a really simple website!",

@@ -3,7 +3,9 @@
 
 #include <ncurses.h>
 
-#include "include/Screen.h"
+#include "../include/constants/bd.h"
+
+#include "../include/util/Screen.h"
 
 struct Screen screen_constructor(int height, int width)
 {
@@ -16,12 +18,13 @@ struct Screen screen_constructor(int height, int width)
     screen.height = height;
     screen.width = width;
 
+    recalc_scr(&screen);
     refresh_scr(&screen);
 
     return screen;
 };
 
-void refresh_scr(struct Screen *screen)
+void recalc_scr(struct Screen *screen)
 {
     getmaxyx(stdscr, screen->y, screen->x);
 
@@ -29,6 +32,14 @@ void refresh_scr(struct Screen *screen)
             screen->width,
 	    screen->y / 2 - screen->height / 2,
 	    screen->x / 2 - screen->width / 2);
+}
+
+void refresh_scr(struct Screen *screen)
+{
+    wborder(screen->win, bd.LEFT, bd.RIGHT, bd.TOP, bd.BOTTOM, bd.TOP_LEFT,
+            bd.TOP_RIGHT, bd.BOTTOM_LEFT, bd.BOTTOM_RIGHT);
+    refresh();
+    wrefresh(screen->win);
 }
 
 void kill_scr(struct Screen *screen)

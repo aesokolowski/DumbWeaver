@@ -1,4 +1,4 @@
-#include "../include/cl.h"
+#include "../include/constants/cl.h"
 
 const struct colors cl = {
     .BLUE_SEL = "BLUE",

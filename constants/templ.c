@@ -1,6 +1,6 @@
 // A.E. Sokolowski Jan 2022 NY, NY, USA
 
-#include "../include/templ.h"
+#include "../include/constants/templ.h"
 
 const struct templates templ = {
     .RESP_HEAD = "HTTP/1.1 200 OK\nDate: %sServer: Apache/2.2.14 (Win32)\nLast-Modified: Sun Jan 23 2022 21:33:00\nContent-Length: %d\nContent-Type: text/html\nConnection: Closed\n\n",

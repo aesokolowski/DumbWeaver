@@ -17,6 +17,7 @@ struct Screen
 
 struct Screen screen_constructor(int, int);
 
+void recalc_scr(struct Screen *);
 void refresh_scr(struct Screen *);
 void kill_scr(struct Screen *);
 

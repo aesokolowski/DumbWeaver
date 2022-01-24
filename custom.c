@@ -9,14 +9,15 @@
 #include <time.h>
 #include <unistd.h>
 
-#include "include/cl.h"
-#include "include/cn.h"
 #include "include/custom.h"
-#include "include/msg.h"
-#include "include/templ.h"
 
-#include "include/Screen.h"
-#include "include/Server.h"
+#include "include/constants/cl.h"
+#include "include/constants/cn.h"
+#include "include/constants/msg.h"
+#include "include/constants/templ.h"
+
+#include "include/util/Screen.h"
+#include "include/util/Server.h"
 
 // TODO: move the ncurses session stuff into a different function, after it closes calls launch,
 // most importantly, see how ncurses can handle user input and use that
@@ -56,11 +57,8 @@ void launch(struct Server *server)
 
     screen = screen_constructor(cn.WIN_H, cn.WIN_W);
 
-    wborder(screen.win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
-    refresh();
-
     do {
-        refresh_scr(&screen);
+        recalc_scr(&screen);
 
 	mvwprintw(screen.win, 4, 2, "%s", msg.WELCOME);
 	mvwprintw(screen.win, 5, 2, "%s ", msg.COLOR);
@@ -78,9 +76,7 @@ void launch(struct Server *server)
 	} else wprintw(screen.win, "%s ", cl.RED_UNSEL);
 	mvwprintw(screen.win, 7, 2, "%s", cn.OKAY);
 
-    	wborder(screen.win, '>', '<', '/', '\\', '\\', '\\', '/', '/');
-	refresh();
-        wrefresh(screen.win);
+        refresh_scr(&screen);
         choice = getch();
 
 	switch (choice)
